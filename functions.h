@@ -6,3 +6,6 @@ void atendimento();
 void pesquisa();
 void carregar_salvar();
 void sobre();
+
+
+void oi();
