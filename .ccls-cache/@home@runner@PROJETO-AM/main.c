@@ -1,33 +1,14 @@
 #include "functions.h"
 #include <stdio.h>
 #include <unistd.h>
+#include "imprimir.c"
 
 int main(void) {
   int opcao;
 
   do {
-    //sleep(1);
-    printf("---------------------------------------------------\n");
-    printf("--------- Bem Vindo ao Atendimento Rápido ---------\n");
-    printf("---------------------------------------------------\n\n");
-    
-    // sleep(1);
-    printf("Qual opção você deseja realizar?\n\n");
-    // sleep(1);
-    printf("[1]. Cadastrar\n");
-    // sleep(1);
-    printf("[2]. Atendimento\n");
-    // sleep(1);
-    printf("[3]. Pesquisa\n");
-    // sleep(1);
-    printf("[4]. Carregar / Salvar\n");
-    // sleep(1);
-    printf("[5]. Sobre\n");
-    // sleep(1);
-    printf("[6]. Sair\n\n");
-    // sleep(1);
 
-    
+    imprimirMenuInicial();
     printf("-->");
     scanf("%d", &opcao);
 

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "structs.h"
 
+
 void limpaBuffer() {
   char a;
   do {
@@ -134,27 +135,22 @@ void remover_da_lista(Lista *lista, Registro registro) {
   }
 }
 
+// MOSTRAR TODA A LISTA //
+void mostrar(Lista *lista) {
+  ELista *atual = lista->inicio;
+  while (atual != NULL) {
+    printf("%d ", atual->dados.nome[50]);
+    atual = atual->proximo;
+  }
+  printf("\n");
+}
+
 
 void cadastrar() { 
   limpaBuffer();
-  Lista *lista = cria_Lista();
+  Lista *lista_criada = cria_Lista();
   int opcao;
-  //sleep(1);
-  printf("\n--------------> PAGINA DE CADASTRO <---------------\n\n"); 
-
-  // sleep(1);
-  printf("Qual operação deseja fazer?\n\n");
-  // sleep(1);
-  printf("1. Cadastrar novo paciente\n");
-  // sleep(1);
-  printf("2. Consultar paciente cadastrado\n");
-  // sleep(1);
-  printf("3. Mostrar lista completa\n");
-  // sleep(1);
-  printf("4. Atualizar dados de paciente\n");
-  // sleep(1);
-  printf("5. Voltar\n\n");
-  // sleep(1);
+  imprimirMenuCadastrar();
   printf("-->");
   scanf("%d", &opcao);
 
@@ -162,7 +158,12 @@ void cadastrar() {
     Registro *paciente = pegar_dados();
     cria_EL(*paciente);
 
-    inserir_na_lista(lista, *paciente);
+    inserir_na_lista(lista_criada, *paciente);
+    // // inserindo //
+    // for (int i = 0; i < 2; i++) {
+    //   inserir_na_lista(lista_criada, valores[i]);
+    //   mostrar(lista_criada);
+    // }
     printf("\nPaciente foi inserido na lista, obrigado!\n");
   }
   else if(opcao == 2){
@@ -189,33 +190,24 @@ void cadastrar() {
 
 // ------------------------------------------------------------------- //
 
-void atendimento() { printf("Atendimento feito!\n"); }
+void atendimento() { 
 
-void pesquisa() { printf("Pesquisa feito!\n"); }
+  imprimirMenuAtendimento();
+  
+}
 
-void carregar_salvar() { printf("Carregar e Salvar feito!\n"); }
+void pesquisa() {
+
+  imprimirMenuPesquisa();
+  
+}
+
+void carregar_salvar() { 
+  
+  imprimirMenuCarregar_Salvar();
+  
+}
 
 void sobre() {
-  sleep(1);
-  printf("\n------------ DADOS DOS DESENVOLVEDORES ------------\n\n");
-  sleep(1);
-  printf("------------------ 1 ------------------\n");
-  printf("Nome: Bruno Arthur Basso Silva\n");
-  printf("Ciclo: 4° semestre\n");
-  printf("Curso: Ciência da Computação - FEI\n");
-  printf("Disciplina: CC4652 - Estrutura de Dados\n");
-  printf("Data: 20/05/2024\n");
-  printf("---------------------------------------\n\n");
-
-  sleep(3);
-
-  printf("------------------ 2 ------------------\n");
-  printf("Nome: Gabriela Molina Ciocci\n");
-  printf("Ciclo: 4° semestre\n");
-  printf("Curso: Ciência da Computação - FEI\n");
-  printf("Disciplina: CC4652 - Estrutura de Dados\n");
-  printf("Data: 20/05/2024\n");
-  printf("---------------------------------------\n\n\n");
-
-  sleep(3);
+  imprimirMenuSobre();
 }
