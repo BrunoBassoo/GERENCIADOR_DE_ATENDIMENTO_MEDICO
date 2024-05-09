@@ -12,6 +12,10 @@ void remover_da_lista(Lista *pacientes, Registro *paciente);
 
 void mostrar(Lista *pacientes);
 
+void consultarPaciente(long int rg, Lista *pacientes);
+
+void removerPaciente(Lista *pacientes);
+
 void CadastrarOpcoes(Lista *pacientes);
 
 void AtendimentoOpcoes(Lista *pacientes);

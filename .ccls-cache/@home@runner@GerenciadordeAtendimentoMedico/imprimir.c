@@ -9,9 +9,9 @@
 // grandes.
 
 void imprimirMenuInicial() {
-  printf("---------------------------------------------------\n");
-  printf("--------- Bem Vindo ao Atendimento Rápido ---------\n");
-  printf("---------------------------------------------------\n\n");
+  printf("|===================================================|\n");
+  printf("|         Bem Vindo ao Atendimento Rápido           |\n");
+  printf("|===================================================|\n\n");
 }
 
 void imprimirMenuOpcoes() {
@@ -32,7 +32,8 @@ void imprimirMenuCadastrar() {
   printf("[2] - Consultar paciente cadastrado\n");
   printf("[3] - Mostrar lista completa\n");
   printf("[4] - Atualizar dados de paciente\n");
-  printf("[5] - Voltar\n\n");
+  printf("[5] - Remover paciente\n");
+  printf("[6] - Voltar\n\n");
 }
 
 void imprimirMenuAtendimento() {
@@ -57,8 +58,7 @@ void imprimirMenuPesquisa() {
 void imprimirMenuCarregar_Salvar() {
   printf("\n--------> PAGINA DE CARREGAR E SALVAR <---------\n\n");
   printf("Qual operação deseja fazer?\n\n");
-  printf(
-      "[1] - Ler um arquivo com os dados dos pacientes e carregar a lista\n");
+  printf("[1] - Ler um arquivo com os dados dos pacientes e carregar a lista\n");
   printf("[2] - Salvar um arquivo com os dados dos pacientes\n");
   printf("[3] - Voltar\n\n");
 }
@@ -79,4 +79,13 @@ void imprimirMenuSobre() {
   printf("| Disciplina: CC4652 - Estrutura de Dados         |\n");
   printf("| Data: 20/05/2024                                |\n");
   printf("|=================================================|\n\n");
+}
+
+void imprimirMenuAtualizarDado(){
+  printf("Qual informação você deseja atualizar?\n\n");
+  printf("[1] - Nome\n");
+  printf("[2] - Idade\n");
+  printf("[3] - RG\n");
+  printf("[4] - Voltar\n\n");
+  printf("Obs: a data de entrada não pode ser alterada!\n\n");
 }

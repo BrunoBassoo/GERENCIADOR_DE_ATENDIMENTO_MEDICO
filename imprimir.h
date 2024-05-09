@@ -13,3 +13,5 @@ void imprimirMenuCarregar_Salvar();
 void imprimirMenuSobre();
 
 void imprimirMenuOpcoes();
+
+void imprimirMenuAtualizarDado();

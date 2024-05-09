@@ -30,19 +30,19 @@ int main(void) {
       break;
       
     case 2:
-      atendimento();
+      AtendimentoOpcoes(pacientes);
       break;
       
     case 3:
-      pesquisa();
+      PesquisaOpcoes(pacientes);
       break;
       
     case 4:
-      carregar_salvar();
+      CarregarSalvar(pacientes);
       break;
       
     case 5:
-      sobre();
+      Sobre();
       break;
       
     case 6:
@@ -50,8 +50,7 @@ int main(void) {
       break;
       
     default:
-      printf("\nOpcao invalida!\n");
-      break;
+      printf("\nOpcao invalida!\n\n");
     }
   }
 

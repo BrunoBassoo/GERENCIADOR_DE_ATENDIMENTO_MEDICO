@@ -96,67 +96,41 @@ void inserir_na_lista(Lista *pacientes, Registro *paciente) {
   }
 }
 
-void remover_da_lista(Lista *pacientes, Registro *paciente) {
+void mostrar(Lista *pacientes) {
   if (pacientes->qtd == 0) {
-    printf("Erro!\n");
+    printf("\nERRO: Nenhum paciente cadastrado.\n\n");
     return;
   }
-
-  if (pacientes->qtd == 1) {
-    pacientes->inicio = NULL;
-    free(pacientes->inicio);
-    pacientes->qtd--;
-  } 
-  else {
-    CelLista *atual = pacientes->inicio;
-    CelLista *anterior = NULL;
-
-    while (atual != NULL && atual->paciente.nome != paciente->nome) { 
-      anterior = atual;
-      atual = atual->proximo;
-    }
-
-    // CASO 2: COMECO 
-    if (anterior == NULL && atual != NULL) {
-      pacientes->inicio = atual->proximo;
-    }
-    // CASO 3: FIM 
-    if (anterior != NULL && atual == NULL) {
-      anterior->proximo = NULL;
-    }
-    // CASO 4: MEIO 
-    if (anterior != NULL && atual != NULL) {
-      anterior->proximo = atual->proximo;
-    }
-    pacientes->qtd--;
-    free(atual);
-  }
-}
-
-void mostrar(Lista *pacientes) {
-  CelLista *atual = pacientes->inicio;
-  int idx = 1;
   
-  while (atual != NULL) {
-    printf("\n==================[PACIENTE %d]===================", idx);
-
-    printf("\n -> Nome: ");
-    for(int i = 0; i < atual->paciente.nome[i] != '\0'; i++){
-      printf("%c", atual->paciente.nome[i]);
+  else{
+    CelLista *atual = pacientes->inicio;
+    int idx = 1;
+    
+    while (atual != NULL) {
+      printf("\n==================[PACIENTE %d]===================", idx);
+  
+      printf("\n -> Nome: ");
+      for(int i = 0; i < atual->paciente.nome[i] != '\0'; i++){
+        printf("%c", atual->paciente.nome[i]);
+      }
+      
+      printf(" -> Idade: %d", atual->paciente.idade);
+      printf("\n -> RG: %ld", atual->paciente.rg);
+  
+      Data atual_data = atual->paciente.entrada;
+      printf("\n -> Data de entrada: %d/%d/%d", atual_data.dia, atual_data.mes, atual_data.ano);
+      
+      printf("\n=================================================\n");
+      atual = atual->proximo;
+      idx++;
     }
-    
-    printf(" -> Idade: %d", atual->paciente.idade);
-    printf("\n -> RG: %ld", atual->paciente.rg);
-
-    Data atual_data = atual->paciente.entrada;
-    printf("\n -> Data de entrada: %d/%d/%d", atual_data.dia, atual_data.mes, atual_data.ano);
-    
-    printf("\n=================================================\n");
-    atual = atual->proximo;
-    idx++;
+    printf("\n");
   }
-  printf("\n");
 }
+
+
+
+
 
 // ===============================================================================
 // MANIPULAÇÃO DE PACIENTE
@@ -181,6 +155,36 @@ int ExistePaciente(long int rg, Lista *pacientes) {
   return -1;
 }
 
+void exibirPacienteInfos(long int rg, Lista *pacientes){
+  long int id = ExistePaciente(rg, pacientes);
+  int idx = 1;
+
+  if(id != -1){
+    CelLista *atual = pacientes->inicio;
+    while(idx <= id) {
+      atual = atual->proximo;
+      idx++;
+    }
+
+    printf("\n====================[PACIENTE]====================");
+
+    printf("\n -> Nome: ");
+    for(int i = 0; i < atual->paciente.nome[i] != '\0'; i++){
+      printf("%c", atual->paciente.nome[i]);
+    }
+
+    printf(" -> Idade: %d", atual->paciente.idade);
+    printf("\n -> RG: %ld", atual->paciente.rg);
+
+    Data atual_data = atual->paciente.entrada;
+    printf("\n -> Data de entrada: %d/%d/%d", atual_data.dia, atual_data.mes, atual_data.ano);
+
+    printf("\n=================================================\n\n");
+  }
+}
+
+
+
 // Caso a opção desejada seja a de cadastrar, nós criamos um paciente através de struct e malloc e pedimos as informações necessárias para criação do mesmo.
 
 Registro *pegar_dados(Lista *pacientes){
@@ -194,7 +198,7 @@ Registro *pegar_dados(Lista *pacientes){
   printf("Digite sua idade: ");
   scanf("%d", &paciente->idade);
   
-  printf("Digite seu rg: ");
+  printf("Digite seu RG: ");
   scanf("%ld", &paciente->rg);
   
   long int id = paciente->rg;
@@ -225,6 +229,153 @@ Registro *pegar_dados(Lista *pacientes){
   return paciente;
 }
 
+void consultarPaciente(Lista *pacientes){
+  if (pacientes->qtd == 0) {
+    printf("\nERRO: Nenhum paciente cadastrado.\n\n");
+    return;
+  }
+
+  else{
+    long int rg;
+    printf("\nDigite o RG do paciente que você deseja consultar: ");
+    scanf("%ld", &rg);
+    
+    long int id = ExistePaciente(rg, pacientes);
+    int idx = 1;
+  
+    if(id != -1){
+      CelLista *atual = pacientes->inicio;
+      while(idx <= id) {
+        atual = atual->proximo;
+        idx++;
+      }
+      
+      exibirPacienteInfos(rg, pacientes);
+      
+    }
+    else{
+      printf("\nERRO: Paciente não existe!\n\n");
+    }
+  }
+}
+
+void atualizarPaciente(Lista *pacientes){
+  long int rg;
+  printf("\nDigite o RG do paciente que você deseja atualizar: ");
+  scanf("%ld", &rg);
+
+  long int id = ExistePaciente(rg, pacientes);
+  int idx = 1;
+
+  if(id != -1){
+    CelLista *atual = pacientes->inicio;
+    while(idx <= id) {
+      atual = atual->proximo;
+      idx++;
+    }
+
+    exibirPacienteInfos(rg, pacientes);
+    
+    int opcao;
+    
+    imprimirMenuAtualizarDado();
+    printf("--> ");
+    scanf("%d", &opcao);
+
+    if(opcao == 1){
+      limpaBuffer();
+      printf("\nDigite o nome atualizado: ");
+      fgets(atual->paciente.nome, 50, stdin);
+      printf("\nNome atualizada com sucesso!\n\n");
+    }
+
+    else if(opcao == 2){
+      printf("\nDigite a idade atualizada: ");
+      scanf("%d", &atual->paciente.idade);
+      printf("\nIdade atualizada com sucesso!\n\n");
+    }
+
+    else if(opcao == 3){
+      long int existenteRG;
+      
+      printf("\nDigite o RG atualizado: ");
+      scanf("%ld", &existenteRG);
+      
+      int flag = ExistePaciente(existenteRG, pacientes);
+
+      if(flag == -1){
+        atual->paciente.rg = existenteRG;
+        printf("\nRG atualizado com sucesso!\n\n");
+      }
+      else{
+        printf("\nRG já existente! Tente novamente.\n\n");
+      }
+    }
+
+    else if(opcao == 4){
+      printf("\n");
+      return;
+    }
+  }
+
+  else{
+    printf("\nERRO: Paciente não existe!\n\n");
+  }    
+}
+
+void removerPaciente(Lista *pacientes) {
+  if (pacientes->qtd == 0) {
+    printf("\nERRO: Nenhum paciente cadastrado.\n\n");
+    return;
+  }
+    
+  else{
+    long int rg;
+    printf("\nDigite o RG do paciente que você deseja remover: ");
+    scanf("%ld", &rg);
+
+    long int id = ExistePaciente(rg, pacientes);
+
+    if(id != -1){
+      if (pacientes->qtd == 1) {
+        pacientes->inicio = NULL;
+        free(pacientes->inicio);
+        pacientes->qtd--;
+      } 
+
+      else {
+        CelLista *atual = pacientes->inicio;
+        CelLista *anterior = NULL;
+
+        while (atual != NULL && atual->paciente.rg != rg) { 
+          anterior = atual;
+          atual = atual->proximo;
+        }
+
+        // CASO 2: COMECO 
+        if (anterior == NULL && atual != NULL) {
+          pacientes->inicio = atual->proximo;
+        }
+        // CASO 3: FIM 
+        if (anterior != NULL && atual == NULL) {
+          anterior->proximo = NULL;
+        }
+        // CASO 4: MEIO 
+        if (anterior != NULL && atual != NULL) {
+          anterior->proximo = atual->proximo;
+        }
+        pacientes->qtd--;
+        free(atual);
+      }
+      
+      printf("\nPaciente removido com sucesso!\n\n");
+    }
+      
+    else{
+      printf("\nERRO: Paciente não existe!\n\n");
+    }
+  }
+}
 
 
 // ===============================================================================
@@ -246,19 +397,20 @@ void CadastrarOpcoes(Lista *pacientes) {
     Registro *paciente = pegar_dados(pacientes);
   }
   else if(opcao == 2){
-    
+    consultarPaciente(pacientes);
   }
   else if(opcao == 3){
     mostrar(pacientes);
   }
   else if(opcao == 4){
-
+    atualizarPaciente(pacientes);
   }
   else if(opcao == 5){
-
+    removerPaciente(pacientes);
   }
   else if(opcao == 6){
-
+    printf("\n");
+    return;
   }
   else{
     printf("Opção Inválida!");
@@ -269,20 +421,92 @@ void CadastrarOpcoes(Lista *pacientes) {
 
 void AtendimentoOpcoes(Lista *pacientes) { 
   imprimirMenuAtendimento();
+  printf("--> ");
+
+  int opcao;
+
+  limpaBuffer();
+  scanf("%d", &opcao);
+
+  if(opcao == 1){
+
+  }
+  else if(opcao == 2){
+
+  }
+  else if(opcao == 3){
+
+  }
+  else if(opcao == 4){
+    printf("\n");
+    return;
+  }
+  else{
+    printf("Opção Inválida!");
+    return;
+  }
   
 }
 
 void PesquisaOpcoes(Lista *pacientes) {
   imprimirMenuPesquisa();
+  printf("--> ");
+
+  int opcao;
+
+  limpaBuffer();
+  scanf("%d", &opcao);
+
+  if(opcao == 1){
+
+  }
+  else if(opcao == 2){
+
+  }
+  else if(opcao == 3){
+
+  }
+  else if(opcao == 4){
+
+  }
+  else if(opcao == 5){
+    printf("\n");
+    return;
+  }
+  else{
+    printf("Opção Inválida!");
+    return;
+  }
   
 }
 
 void CarregarSalvar(Lista *pacientes) { 
   imprimirMenuCarregar_Salvar();
+  printf("--> ");
+
+  int opcao;
+
+  limpaBuffer();
+  scanf("%d", &opcao);
+
+  if(opcao == 1){
+    
+  }
+  else if(opcao == 2){
+    
+  }
+  else if(opcao == 3){
+    printf("\n");
+    return;
+  }
+  else{
+    printf("Opção Inválida!");
+    return;
+  }
   
 }
 
 void Sobre() {
   imprimirMenuSobre();
-  
+    
 }
