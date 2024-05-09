@@ -1,3 +1,12 @@
 {
-  "files": {}
+  "files": {
+    "functions.c": [
+      {
+        "id": "c31f4dec-8fd3-4634-aa0d-a6c00e9fe5fe",
+        "line": 51,
+        "version": 1380,
+        "index": 1975
+      }
+    ]
+  }
 }
