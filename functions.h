@@ -1,34 +1,25 @@
 #include "structs.h"
 
-// NOMEANDO AS FUNÇÕES
-// IMPORTAR OS STRUCTS PARA AS FUNCOES!
+Registro *pegar_dados(Lista *pacientes);
 
-// funcao para pegar dados
-Registro *pegar_dados();
-
-// funcoes para o cadastrar
 Lista *cria_Lista();
 
-CelLista *cria_CelLista(Registro registro);
+CelLista *cria_CelLista(Registro paciente);
 
-void inserir_na_lista(Lista *lista, Registro registro);
+void inserir_na_lista(Lista *pacientes, Registro paciente);
 
-void remover_da_lista(Lista *lista, Registro registro);
+void remover_da_lista(Lista *pacientes, Registro *paciente);
 
-void CadastrarOpcoes();
+void mostrar(Lista *pacientes);
 
-// funções para o atendimento
-void atendimento();
+void CadastrarOpcoes(Lista *pacientes);
 
+void AtendimentoOpcoes(Lista *pacientes);
 
-// funções para o pesquisa
-void pesquisa();
+void PesquisaOpcoes(Lista *pacientes);
 
-// funções para o carregar_salvar
-void carregar_salvar();
+void CarregarSalvar(Lista *pacientes);
 
+void Sobre();
 
-void sobre();
-
-// Limpando para tirar o debugg
 void limpaBuffer();

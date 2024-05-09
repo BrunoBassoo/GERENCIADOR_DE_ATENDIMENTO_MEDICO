@@ -4,15 +4,21 @@
 #include "structs.h"
 #include "imprimir.h"
 
-// Variáveis criadas para poder limitar o tamanho máximo de pacientes que podem ser criados.
+// Variável criada para poder limitar o tamanho máximo de pacientes que podem ser criados.
 
 int maxPacientes = 10;
 
-// Varíáveis que guardam a quantidade de pacientes já existentes. o i antes do nome significa "index"
+// Varíável que guarda a quantidade de pacientes já existentes. o i antes do nome significa "index"
 
 int iPacientes = 0;
 
-// Array de structs criado para armazenas todos os pacientes. Isso facilita muito para trabalhar com os dados que temos e iremos trabalhar, pois estando em listas, podemos percorrê-las para encontrar o que precisamos, modificar dentro das listas e depois reescrever por cima dos arquivos, sem a necessidade de trabalhar diretamente com os arquivos.
+
+
+// ===============================================================================
+// CRIAÇÃO DE LISTAS DE PACIENTES E REGISTRO DE PACIENTES
+// ===============================================================================
+
+// Funções responsáveis para criação da lista de pacientes e do registro de cada paciente no programa.
 
 
 Lista *cria_Lista() {
@@ -31,10 +37,11 @@ CelLista *cria_CelLista(Registro *paciente){
   return celula;
 }
 
+
+
 // ===============================================================================
 // FUNÇÕES PRINCIPAIS PARA O FUNCIONAMENTO DO CÓDIGO
 // ===============================================================================
-
 
 // Essa função é muito importante para a funcionalidade do nosso programa, pois muitas vezes, o programa acaba ficando com resíduos na memória, que podem acarretar em problemas para captar alguma informação de tipo "char", já que esses resíduos podem acabar se tornando a informação que o usuário deve fornecer. A função é responsável por remover todo tipo de resíduo da memória e bloquear a entrada dos mesmos no código, fazendo com que a única entrada possível seja a que o usuário entregar.
 
@@ -45,9 +52,12 @@ void limpaBuffer() {
   } while (a != '\n' && a != EOF);
 }
 
+
+
 // ===============================================================================
 // MANIPULAÇÃO DE LISTA
 // ===============================================================================
+
 
 
 void inserir_na_lista(Lista *pacientes, Registro *paciente) {
@@ -86,21 +96,19 @@ void inserir_na_lista(Lista *pacientes, Registro *paciente) {
   }
 }
 
-
-
-void remover_da_lista(Lista *lista, Registro *paciente) {
-  if (lista->qtd == 0) {
+void remover_da_lista(Lista *pacientes, Registro *paciente) {
+  if (pacientes->qtd == 0) {
     printf("Erro!\n");
     return;
   }
 
-  if (lista->qtd == 1) {
-    lista->inicio = NULL;
-    free(lista->inicio);
-    lista->qtd--;
+  if (pacientes->qtd == 1) {
+    pacientes->inicio = NULL;
+    free(pacientes->inicio);
+    pacientes->qtd--;
   } 
   else {
-    CelLista *atual = lista->inicio;
+    CelLista *atual = pacientes->inicio;
     CelLista *anterior = NULL;
 
     while (atual != NULL && atual->paciente.nome != paciente->nome) { 
@@ -110,7 +118,7 @@ void remover_da_lista(Lista *lista, Registro *paciente) {
 
     // CASO 2: COMECO 
     if (anterior == NULL && atual != NULL) {
-      lista->inicio = atual->proximo;
+      pacientes->inicio = atual->proximo;
     }
     // CASO 3: FIM 
     if (anterior != NULL && atual == NULL) {
@@ -120,12 +128,11 @@ void remover_da_lista(Lista *lista, Registro *paciente) {
     if (anterior != NULL && atual != NULL) {
       anterior->proximo = atual->proximo;
     }
-    lista->qtd--;
+    pacientes->qtd--;
     free(atual);
   }
 }
 
-// MOSTRAR TODA A LISTA //
 void mostrar(Lista *pacientes) {
   CelLista *atual = pacientes->inicio;
   int idx = 1;
@@ -220,6 +227,9 @@ Registro *pegar_dados(Lista *pacientes){
 
 
 
+// ===============================================================================
+// SELEÇÃO DE OPÇÕES PARA CADA MENÚ
+// ===============================================================================
 
 
 
@@ -257,24 +267,22 @@ void CadastrarOpcoes(Lista *pacientes) {
 
 }
 
-// ------------------------------------------------------------------- //
-
-void atendimento() { 
+void AtendimentoOpcoes(Lista *pacientes) { 
   imprimirMenuAtendimento();
   
 }
 
-void pesquisa() {
+void PesquisaOpcoes(Lista *pacientes) {
   imprimirMenuPesquisa();
   
 }
 
-void carregar_salvar() { 
+void CarregarSalvar(Lista *pacientes) { 
   imprimirMenuCarregar_Salvar();
   
 }
 
-void sobre() {
+void Sobre() {
   imprimirMenuSobre();
   
 }
