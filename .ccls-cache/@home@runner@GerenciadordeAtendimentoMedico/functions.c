@@ -60,7 +60,7 @@ void limpaBuffer() {
 
 
 
-void inserir_na_lista(Lista *pacientes, Registro *paciente) {
+void inserirLista(Lista *pacientes, Registro *paciente) {
   CelLista *novo = cria_CelLista(paciente);
 
   // CASO 1: INICIO 
@@ -221,7 +221,7 @@ Registro *pegar_dados(Lista *pacientes){
   }
   else{
     cria_CelLista(paciente);
-    inserir_na_lista(pacientes, paciente);
+    inserirLista(pacientes, paciente);
     
     printf("\nPaciente cadastrado!\n\n");
   }
@@ -378,6 +378,76 @@ void removerPaciente(Lista *pacientes) {
 }
 
 
+
+// ===============================================================================
+// MANIPULAÇÃO DOS ARQUIVOS
+// ===============================================================================
+
+
+void SalvarPacientes(Lista *pacientes){
+  
+  FILE *file = fopen("pacientes.bin", "wb");
+
+  CelLista *atual = pacientes->inicio;
+  CelLista *anterior = NULL;
+
+  while (atual != NULL) {
+    fwrite(&atual->paciente.nome, sizeof(char), 50, file);
+    fwrite(&atual->paciente.idade, sizeof(int), 1, file);
+    fwrite(&atual->paciente.rg, sizeof(long int), 1, file);
+    fwrite(&atual->paciente.entrada, sizeof(Data), 1, file);
+    
+    anterior = atual;
+    atual = atual->proximo;
+  }
+
+  printf("\nArquivo com pacientes salvo com sucesso!\n\n");
+  
+  fclose(file);
+}
+
+void CarregarPacientes(Lista *pacientes){
+
+  FILE *file = fopen("pacientes.bin", "rb");
+
+  if(file != NULL){
+    CelLista *atual = NULL;
+    CelLista *anterior = NULL;
+
+    while(!feof(file)){
+      atual = malloc(sizeof(CelLista));
+      if(fread(&(atual->paciente), sizeof(Registro), 1, file) == 1){
+        if (anterior == NULL) {
+            pacientes->inicio = atual;
+        } else {
+            anterior->proximo = atual;
+        }
+        anterior = atual;
+      } 
+      else {
+        free(atual);
+        return;
+      }
+    }
+
+    if (anterior != NULL) {
+        anterior->proximo = NULL;
+    }
+
+    printf("\nArquivo com pacientes carregado com sucesso!\n\n");
+
+    fclose(file);
+  }
+
+  else{
+    printf("\nERRO: não foi possível carregar o arquivo.\n");
+    printf("\n       '-> arquivo não encontrado.\n\n");
+  }
+}
+
+
+
+
 // ===============================================================================
 // SELEÇÃO DE OPÇÕES PARA CADA MENÚ
 // ===============================================================================
@@ -490,10 +560,10 @@ void CarregarSalvar(Lista *pacientes) {
   scanf("%d", &opcao);
 
   if(opcao == 1){
-    
+    CarregarPacientes(pacientes);
   }
   else if(opcao == 2){
-    
+    SalvarPacientes(pacientes);
   }
   else if(opcao == 3){
     printf("\n");

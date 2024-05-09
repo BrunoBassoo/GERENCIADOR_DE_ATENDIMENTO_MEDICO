@@ -6,9 +6,9 @@ Lista *cria_Lista();
 
 CelLista *cria_CelLista(Registro paciente);
 
-void inserir_na_lista(Lista *pacientes, Registro paciente);
+void inserirLista(Lista *pacientes, Registro paciente);
 
-void remover_da_lista(Lista *pacientes, Registro *paciente);
+void removerLista(Lista *pacientes, Registro *paciente);
 
 void mostrar(Lista *pacientes);
 
