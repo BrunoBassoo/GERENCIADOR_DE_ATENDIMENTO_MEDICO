@@ -392,7 +392,7 @@ void SalvarPacientes(Lista *pacientes){
   CelLista *anterior = NULL;
 
   while (atual != NULL) {
-    fwrite(&atual->paciente.nome, sizeof(char), 50, file);
+    fwrite(atual->paciente.nome, sizeof(char), 50, file);
     fwrite(&atual->paciente.idade, sizeof(int), 1, file);
     fwrite(&atual->paciente.rg, sizeof(long int), 1, file);
     fwrite(&atual->paciente.entrada, sizeof(Data), 1, file);
@@ -408,31 +408,22 @@ void SalvarPacientes(Lista *pacientes){
 
 void CarregarPacientes(Lista *pacientes){
 
-  FILE *file = fopen("pacientes.bin", "rb");
+   FILE *file = fopen("pacientes.bin", "rb");
 
-  if(file != NULL){
-    CelLista *atual = NULL;
-    CelLista *anterior = NULL;
+  CelLista *atual = pacientes->inicio;
+  CelLista *anterior = NULL;
 
-    while(!feof(file)){
-      atual = malloc(sizeof(CelLista));
-      if(fread(&(atual->paciente), sizeof(Registro), 1, file) == 1){
-        if (anterior == NULL) {
-            pacientes->inicio = atual;
-        } else {
-            anterior->proximo = atual;
-        }
+    if(file != 0){
+      while(!feof(file)){
+        fread(atual->paciente.nome, sizeof(char), 50, file);
+        fread(&atual->paciente.idade, sizeof(int), 1, file);
+        fread(&atual->paciente.rg, sizeof(long int), 1, file);
+        fread(&atual->paciente.entrada, sizeof(Data), 1, file);
+
         anterior = atual;
-      } 
-      else {
-        free(atual);
-        return;
+        atual = atual->proximo;
+        iPacientes++;
       }
-    }
-
-    if (anterior != NULL) {
-        anterior->proximo = NULL;
-    }
 
     printf("\nArquivo com pacientes carregado com sucesso!\n\n");
 
@@ -578,5 +569,4 @@ void CarregarSalvar(Lista *pacientes) {
 
 void Sobre() {
   imprimirMenuSobre();
-    
 }
