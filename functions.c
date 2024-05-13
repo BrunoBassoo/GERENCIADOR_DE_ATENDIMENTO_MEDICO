@@ -1,18 +1,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <time.h>
 #include "structs.h"
 #include "imprimir.h"
-
-// Variável criada para poder limitar o tamanho máximo de pacientes que podem ser criados.
-
-int maxPacientes = 10;
-
-// Varíável que guarda a quantidade de pacientes já existentes. o i antes do nome significa "index"
-
-int iPacientes = 0;
-
-
 
 // ===============================================================================
 // CRIAÇÃO DE LISTAS DE PACIENTES E REGISTRO DE PACIENTES
@@ -203,16 +194,14 @@ Registro *pegar_dados(Lista *pacientes){
   
   long int id = paciente->rg;
 
-  printf("Digite a data de hoje!\n");
-  printf("Dia: ");
-  scanf("%d", &paciente->entrada.dia);
+  struct tm *data_hora_atual;
+  time_t data;
+  time(&data);
+  struct tm *data_atual = localtime(&data);
   
-  printf("Mes: ");
-  scanf("%d", &paciente->entrada.mes);
-  
-  printf("Ano: ");
-  scanf("%d", &paciente->entrada.ano);
-
+  paciente->entrada.dia = data_atual->tm_mday;
+  paciente->entrada.mes = data_atual->tm_mon+1;
+  paciente->entrada.ano = data_atual->tm_year+1900;
 
   id = ExistePaciente(id, pacientes);
 
@@ -422,7 +411,6 @@ void CarregarPacientes(Lista *pacientes){
 
         anterior = atual;
         atual = atual->proximo;
-        iPacientes++;
       }
 
     printf("\nArquivo com pacientes carregado com sucesso!\n\n");
