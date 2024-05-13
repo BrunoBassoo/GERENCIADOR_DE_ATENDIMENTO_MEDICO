@@ -386,10 +386,7 @@ void SalvarPacientes(Lista *pacientes){
   CelLista *anterior = NULL;
 
   while (atual != NULL) {
-    fwrite(atual->paciente.nome, sizeof(char), 50, file);
-    fwrite(&atual->paciente.idade, sizeof(int), 1, file);
-    fwrite(&atual->paciente.rg, sizeof(long int), 1, file);
-    fwrite(&atual->paciente.entrada, sizeof(Data), 1, file);
+    fwrite(&atual->paciente, sizeof(Registro), 1, file);
     
     anterior = atual;
     atual = atual->proximo;
@@ -402,21 +399,16 @@ void SalvarPacientes(Lista *pacientes){
 
 void CarregarPacientes(Lista *pacientes){
 
-   FILE *file = fopen("pacientes.bin", "rb");
+  FILE *file = fopen("pacientes.bin", "rb");
 
-  CelLista *atual = pacientes->inicio;
-  CelLista *anterior = NULL;
+  if(file != 0){
+    CelLista *atual;
+    while(fread(&atual->paciente, sizeof(Registro), 1, file) == 1){
+      CelLista *novo = cria_CelLista(&atual->paciente);
+      inserirLista(pacientes, &novo->paciente);
 
-    if(file != 0){
-      while(!feof(file)){
-        fread(atual->paciente.nome, sizeof(char), 50, file);
-        fread(&atual->paciente.idade, sizeof(int), 1, file);
-        fread(&atual->paciente.rg, sizeof(long int), 1, file);
-        fread(&atual->paciente.entrada, sizeof(Data), 1, file);
-
-        anterior = atual;
-        atual = atual->proximo;
-      }
+      atual = novo->proximo;
+    }
 
     printf("\nArquivo com pacientes carregado com sucesso!\n\n");
 
@@ -425,7 +417,7 @@ void CarregarPacientes(Lista *pacientes){
 
   else{
     printf("\nERRO: não foi possível carregar o arquivo.\n");
-    printf("\n       '-> arquivo não encontrado.\n\n");
+    printf("         '-> arquivo não encontrado.\n\n");
   }
 }
 
