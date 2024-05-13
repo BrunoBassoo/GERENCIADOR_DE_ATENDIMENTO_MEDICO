@@ -402,12 +402,10 @@ void CarregarPacientes(Lista *pacientes){
   FILE *file = fopen("pacientes.bin", "rb");
 
   if(file != 0){
-    CelLista *atual;
-    while(fread(&atual->paciente, sizeof(Registro), 1, file) == 1){
-      CelLista *novo = cria_CelLista(&atual->paciente);
+    Registro paciente;
+    while(fread(&paciente, sizeof(Registro), 1, file) == 1){
+      CelLista *novo = cria_CelLista(&paciente);
       inserirLista(pacientes, &novo->paciente);
-
-      atual = novo->proximo;
     }
 
     printf("\nArquivo com pacientes carregado com sucesso!\n\n");
