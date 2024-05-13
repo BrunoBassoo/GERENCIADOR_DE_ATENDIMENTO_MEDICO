@@ -194,10 +194,15 @@ Registro *pegar_dados(Lista *pacientes){
   
   long int id = paciente->rg;
 
-  struct tm *data_hora_atual;
+  // através da biblioteca time.h, conseguimos obter a data atual. Para isso, criamos uma struct do tipo time_t (struct existente na biblioteca) que será responsável por armazenar  o tempo de calendário. 
+
   time_t data;
   time(&data);
   struct tm *data_atual = localtime(&data);
+
+  // tm_day: representa os dias do mês de 1 a 31
+  // tm_mon: representa os meses do ano de 0 a 11, por isso adicionamos 1 no valor obtido
+  // tm_year: representa o ano a partir de 1900, por isso adicionamos 1900 no valor obtido
   
   paciente->entrada.dia = data_atual->tm_mday;
   paciente->entrada.mes = data_atual->tm_mon+1;
