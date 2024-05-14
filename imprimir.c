@@ -48,9 +48,9 @@ void imprimirMenuAtendimento() {
 void imprimirMenuPesquisa() {
   printf("\n-------------> PAGINA DE PESQUISA <--------------\n\n");
   printf("Qual operação deseja fazer?\n\n");
-  printf("[1] - Mostrar registros ordenados por dia de registro\n");
+  printf("[1] - Mostrar registros ordenados por ano de registro\n");
   printf("[2] - Mostrar registros ordenados por mês de registro\n");
-  printf("[3] - Mostrar registros ordenados por ano de registro\n");
+  printf("[3] - Mostrar registros ordenados por dia de registro\n");
   printf("[4] - Mostrar registros ordenados por idade de registro\n");
   printf("[5] - Voltar\n\n");
 }

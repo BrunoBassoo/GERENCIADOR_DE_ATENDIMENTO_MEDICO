@@ -33,25 +33,27 @@ typedef struct Lista{
 // --- Atendimento ---
 
 typedef struct CelFila{
-  Registro dados;
+  Registro paciente;
   struct CelFila *proximo;
+  struct CelFila *anterior;
 } CelFila;
 
 typedef struct Fila{
-  struct CelFila *Head;
-  CelFila Tail;
+  struct CelFila *head;
+  struct CelFila *tail;
   int qtd;
 } Fila;
 
 // --- Pesquisa ---
 
-typedef struct CelABB{
-  Registro dados;
-  struct CelABB *filhoesq;
-  struct CelABB *filhodir;
-} CelABB;
+typedef struct CelArvore{
+  Registro paciente;
+  struct CelArvore *filhoesq;
+  struct CelArvore *filhodir;
+  struct CelArvore *pai;
+} CelArvore;
 
-typedef struct ABB{
-  CelABB raiz;
+typedef struct Arvore{
+  CelArvore *raiz;
   int qtd;
-} ABB;
+} Arvore;

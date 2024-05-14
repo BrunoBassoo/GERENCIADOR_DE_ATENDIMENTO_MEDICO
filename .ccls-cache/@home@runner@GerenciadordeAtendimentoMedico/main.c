@@ -18,6 +18,7 @@
 int main(void) {
   int opcao = -1;
   Lista *pacientes = cria_Lista();
+  
   imprimirMenuInicial();
   
   while (opcao != 6){
