@@ -10,6 +10,8 @@ CelArvore *cria_CelArvore(Registro *paciente);
 
 Arvore *cria_Arvore();
 
+void mostrarFila(Fila *atendimento);
+
 Fila *cria_Fila();
 
 CelFila *cria_CelFila(Registro *paciente);

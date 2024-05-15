@@ -195,44 +195,115 @@ void mostrarLista(Lista *pacientes) {
 // MANIPULAÇÃO DE FILA
 // ===============================================================================
 
-void inserirFila(Fila *atendimento, Registro *paciente) {
-  CelFila *novo = cria_CelFila(paciente);
-
+void mostrarFila(Fila *atendimento){
   if (atendimento->qtd == 0) {
-    atendimento->head = novo;
-    atendimento->tail = novo;
-    atendimento->qtd++;
-  }
-
-  else {
-    CelFila *atual = atendimento->tail;
-
-    novo->anterior = atual;
-    atual->proximo = novo;
-    atendimento->tail = novo;
-    atendimento->qtd++;
-  }
-}
-
-void removerFila(Fila *atendimento, Registro *paciente) {
-  if (atendimento->qtd == 0) {
-    printf("Erro!\n");
-  }
-
-  else if (atendimento->qtd == 1) {
-    atendimento->head = NULL;
-    free(atendimento->head);
-    atendimento->qtd--;
+    printf("\nERRO: Nenhum paciente enfileirado.\n\n");
+    return;
   }
 
   else {
     CelFila *atual = atendimento->head;
-    CelFila *proximo = atendimento->head->proximo;
-    free(atendimento->head);
-    atendimento->head = proximo;
-    atendimento->qtd--;
+    int idx = 1;
+
+    printf("\n================== ATENDIMENTO ===================\n\n");
+    
+    while (atual != NULL) {
+      printf("\n==================[PACIENTE %d]===================", idx);
+
+      printf("\n -> Nome: ");
+      for (int i = 0; atual->paciente.nome[i] != '\0'; i++) {
+        printf("%c", atual->paciente.nome[i]);
+      }
+
+      printf(" -> Idade: %d", atual->paciente.idade);
+      printf("\n -> RG: %ld", atual->paciente.rg);
+
+      Data atual_data = atual->paciente.entrada;
+      printf("\n -> Data de entrada: %d/%d/%d", atual_data.dia, atual_data.mes,
+             atual_data.ano);
+
+      printf("\n=================================================\n");
+      atual = atual->proximo;
+      idx++;
+    }
+    printf("\n");
+  }
+  
+}
+void inserirFila(Fila *atendimento, Lista *pacientes) {
+  
+  long int rg;
+  printf("\nDigite o RG do paciente que você deseja enfileirar: ");
+  scanf("%ld", &rg);
+
+  long int id = ExistePaciente(rg, pacientes);
+  int idx = 1;
+  
+  if(id != -1){
+    CelLista *atual = pacientes->inicio;
+
+    while (idx <= id) {
+      atual = atual->proximo;
+      idx++;
+    }
+
+    CelFila *novo = cria_CelFila(&atual->paciente);
+
+    if (atendimento->qtd == 0) {
+      atendimento->head = novo;
+      atendimento->tail = novo;
+      atendimento->qtd++;
+    }
+    else {
+      CelFila *atual = atendimento->tail;
+      novo->anterior = atual;
+      atual->proximo = novo;
+      atendimento->tail = novo;
+      atendimento->qtd++;
+    }
+    printf("\nPaciente enfileirado com sucesso!\n\n");
+  }
+  else {
+     printf("\nERRO: Paciente não existe!\n\n");
+  }
+  
+}
+
+void removerFila(Fila *atendimento, Lista *pacientes) {
+  long int rg;
+  printf("\nDigite o RG do paciente que você deseja desenfileirar: ");
+  scanf("%ld", &rg);
+
+  int id = ExistePaciente(rg, pacientes);
+  int idx = 1;
+  if(id != -1){
+    CelLista *atual = pacientes->inicio;
+
+    while (idx <= id) {
+      atual = atual->proximo;
+      idx++;
+    }
+    if (atendimento->qtd == 0) {
+      printf("Erro!\n");
+    }
+    
+    else if (atendimento->qtd == 1) {
+      atendimento->head = NULL;
+      free(atendimento->head);
+      atendimento->qtd--;
+    }
+    
+    else {
+      CelFila *atual = atendimento->head;
+      CelFila *proximo = atendimento->head->proximo;
+      free(atendimento->head);
+      atendimento->head = proximo;
+      atendimento->qtd--;
+    }
   }
 }
+
+
 
 // ===============================================================================
 // MANIPULAÇÃO DE ÁRVORE BINÁRIA DE BUSCA
@@ -368,6 +439,10 @@ void inserirArvore(Lista *pacientes, int type) {
     paciente = paciente->proximo;
   }
   mostrarArvore(pesquisa->raiz, pacientes);
+
+  // limpar a memória
+  
+  free(pesquisa);
 }
 
 // ===============================================================================
@@ -634,24 +709,30 @@ void CadastrarOpcoes(Lista *pacientes) {
 
   if (opcao == 1) {
     Registro *paciente = pegar_dados(pacientes);
-  } else if (opcao == 2) {
+  } 
+  else if (opcao == 2) {
     consultarPaciente(pacientes);
-  } else if (opcao == 3) {
+  } 
+  else if (opcao == 3) {
     mostrarLista(pacientes);
-  } else if (opcao == 4) {
+  } 
+  else if (opcao == 4) {
     atualizarPaciente(pacientes);
-  } else if (opcao == 5) {
+  } 
+  else if (opcao == 5) {
     removerPaciente(pacientes);
-  } else if (opcao == 6) {
+  } 
+  else if (opcao == 6) {
     printf("\n");
     return;
-  } else {
+  } 
+  else {
     printf("Opção Inválida!");
     return;
   }
 }
 
-void AtendimentoOpcoes(Lista *pacientes) {
+void AtendimentoOpcoes(Lista *pacientes, Fila *atendimento) {
   imprimirMenuAtendimento();
   printf("--> ");
 
@@ -661,15 +742,19 @@ void AtendimentoOpcoes(Lista *pacientes) {
   scanf("%d", &opcao);
 
   if (opcao == 1) {
-
-  } else if (opcao == 2) {
-
-  } else if (opcao == 3) {
-
-  } else if (opcao == 4) {
+    inserirFila(atendimento, pacientes);
+  } 
+  else if (opcao == 2) {
+    removerFila(atendimento, pacientes);
+  } 
+  else if (opcao == 3) {
+    mostrarFila(atendimento);
+  } 
+  else if (opcao == 4) {
     printf("\n");
     return;
-  } else {
+  } 
+  else {
     printf("Opção Inválida!");
     return;
   }
@@ -686,16 +771,21 @@ void PesquisaOpcoes(Lista *pacientes) {
 
   if (opcao == 1) {
     inserirArvore(pacientes, 1);
-  } else if (opcao == 2) {
+  } 
+  else if (opcao == 2) {
     inserirArvore(pacientes, 2);
-  } else if (opcao == 3) {
+  } 
+  else if (opcao == 3) {
     inserirArvore(pacientes, 3);
-  } else if (opcao == 4) {
+  } 
+  else if (opcao == 4) {
     inserirArvore(pacientes, 4);
-  } else if (opcao == 5) {
+  } 
+  else if (opcao == 5) {
     printf("\n");
     return;
-  } else {
+  } 
+  else {
     printf("Opção Inválida!");
     return;
   }
@@ -712,12 +802,15 @@ void CarregarSalvar(Lista *pacientes) {
 
   if (opcao == 1) {
     CarregarPacientes(pacientes);
-  } else if (opcao == 2) {
+  } 
+  else if (opcao == 2) {
     SalvarPacientes(pacientes);
-  } else if (opcao == 3) {
+  } 
+  else if (opcao == 3) {
     printf("\n");
     return;
-  } else {
+  } 
+  else {
     printf("Opção Inválida!");
     return;
   }
