@@ -260,7 +260,7 @@ void inserirArvore(Lista *pacientes, int type) {
       }
 
       else {
-        CelArvore *atual = pesquisa->raiz;
+      CelArvore *atual = pesquisa->raiz;
         CelArvore *anterior = NULL;
 
         while (atual != NULL) {
