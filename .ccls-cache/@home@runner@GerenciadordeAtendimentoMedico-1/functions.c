@@ -255,29 +255,37 @@ void inserirFila(Fila *atendimento, Lista *pacientes) {
   int idx = 1;
   
   if(id != -1){
-    CelLista *atual = pacientes->inicio;
-    while (idx <= id) {
-      atual = atual->proximo;
-      idx++;
+    int idFila = ExistePacienteNaFila(rg, atendimento);
+    
+    if(idFila != -1){
+      printf("\nERRO: Paciente já está na fila de atendimento!\n\n");
     }
 
-    CelFila *novo = cria_CelFila(&atual->paciente);
+    else{
+      CelLista *atual = pacientes->inicio;
+        while (idx <= id) {
+          atual = atual->proximo;
+          idx++;
+        }
 
-    if (atendimento->qtd == 0) {
-      atendimento->head = novo;
-      atendimento->tail = novo;
-      atendimento->qtd++;
-    }
+        CelFila *novo = cria_CelFila(&atual->paciente);
 
-    else {
-      CelFila *atual = atendimento->tail;
-      novo->anterior = atual;
-      atual->proximo = novo;
-      atendimento->tail = novo;
-      atendimento->qtd++;
-    }
-    printf("\nPaciente enfileirado com sucesso!\n\n");    
-  }
+        if (atendimento->qtd == 0) {
+          atendimento->head = novo;
+          atendimento->tail = novo;
+          atendimento->qtd++;
+        }
+
+        else {
+          CelFila *atual = atendimento->tail;
+          novo->anterior = atual;
+          atual->proximo = novo;
+          atendimento->tail = novo;
+          atendimento->qtd++;
+        }
+        printf("\nPaciente enfileirado com sucesso!\n\n");    
+      }
+    }  
     
   else {
      printf("\nERRO: Paciente não existe!\n\n");
@@ -317,9 +325,14 @@ void removerFila(Fila *atendimento) {
         atendimento->head = proximo;
         atendimento->qtd--;
       }
+
+      printf("\nPaciente desinfileirado com sucesso!\n\n");
+    }
+
+    else{
+      printf("\nERRO: Paciente não está na lista de atendimento!\n\n");
     }
   }
-  printf("\nPaciente desinfileirado com sucesso!\n\n");
 }
 
 
