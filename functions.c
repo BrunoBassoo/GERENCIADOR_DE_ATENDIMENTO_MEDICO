@@ -109,6 +109,22 @@ int ExistePaciente(long int rg, Lista *pacientes) {
   return -1;
 }
 
+int ExistePacienteNaFila(long int rg, Fila *atendimento) {
+  int idx = 0;
+  CelFila *atual = atendimento->head;
+
+  while (atual != NULL) {
+    if (atual->paciente.rg == rg) {
+      return idx;
+    } else {
+      idx++;
+      atual = atual->proximo;
+    }
+  }
+
+  return -1;
+}
+
 void exibirPacienteInfos(long int rg, Lista *pacientes) {
   long int id = ExistePaciente(rg, pacientes);
   int idx = 1;
@@ -268,7 +284,7 @@ void inserirFila(Fila *atendimento, Lista *pacientes) {
   }
 }
 
-void removerFila(Fila *atendimento, Lista *pacientes) {
+void removerFila(Fila *atendimento) {
   if (atendimento->qtd == 0) {
     printf("\nERRO: A fila de atendimento está vazia!\n\n");
   }
@@ -278,11 +294,11 @@ void removerFila(Fila *atendimento, Lista *pacientes) {
     printf("\nDigite o RG do paciente que você deseja desenfileirar: ");
     scanf("%ld", &rg);
   
-    int id = ExistePaciente(rg, pacientes);
+    int id = ExistePacienteNaFila(rg, atendimento);
     int idx = 1;
     
     if(id != -1){
-      CelLista *atual = pacientes->inicio;
+      CelFila *atual = atendimento->head;
       while (idx <= id) {
         atual = atual->proximo;
         idx++;
@@ -303,6 +319,7 @@ void removerFila(Fila *atendimento, Lista *pacientes) {
       }
     }
   }
+  printf("\nPaciente desinfileirado com sucesso!\n\n");
 }
 
 
@@ -747,7 +764,7 @@ void AtendimentoOpcoes(Lista *pacientes, Fila *atendimento) {
     inserirFila(atendimento, pacientes);
   } 
   else if (opcao == 2) {
-    removerFila(atendimento, pacientes);
+    removerFila(atendimento);
   } 
   else if (opcao == 3) {
     mostrarFila(atendimento);
