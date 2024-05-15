@@ -35,7 +35,7 @@ CelLista *cria_CelLista(Registro *paciente) {
 // Funções responsáveis para criação da fila de pacientes para realizar o
 // atendimento.
 
-Fila *cria_Fila(){
+Fila *cria_Fila() {
   Fila *fila = malloc(sizeof(Fila));
   fila->qtd = 0;
   fila->head = NULL;
@@ -43,7 +43,7 @@ Fila *cria_Fila(){
   return fila;
 }
 
-CelFila *cria_CelFila(Registro *paciente){
+CelFila *cria_CelFila(Registro *paciente) {
   CelFila *celula = malloc(sizeof(CelFila));
   celula->paciente = *paciente;
   celula->proximo = NULL;
@@ -55,17 +55,17 @@ CelFila *cria_CelFila(Registro *paciente){
 // CRIAÇÃO DA ÁRVORE BINÁRIA DE BUSCA
 // ===============================================================================
 
-// Funções responsáveis para criação da árvore binária de pacientes para realizar o
-// pesquisa.
+// Funções responsáveis para criação da árvore binária de pacientes para
+// realizar o pesquisa.
 
-Arvore *cria_Arvore(){
+Arvore *cria_Arvore() {
   Arvore *pesquisa = malloc(sizeof(Arvore));
   pesquisa->raiz = NULL;
   pesquisa->qtd = 0;
   return pesquisa;
 }
 
-CelArvore *cria_CelArvore(Registro *paciente){
+CelArvore *cria_CelArvore(Registro *paciente) {
   CelArvore *celula = malloc(sizeof(CelArvore));
   celula->filhodir = NULL;
   celula->filhoesq = NULL;
@@ -134,7 +134,7 @@ void exibirPacienteInfos(long int rg, Lista *pacientes) {
     printf("\n -> Data de entrada: %d/%d/%d", atual_data.dia, atual_data.mes,
            atual_data.ano);
 
-    printf("\n==================================================\n\n");
+    printf("\n==================================================\n");
   }
 }
 
@@ -151,29 +151,10 @@ void inserirLista(Lista *pacientes, Registro *paciente) {
     pacientes->qtd++;
   } else {
     CelLista *atual = pacientes->inicio;
-    CelLista *anterior = NULL;
 
-    while (atual != NULL) {
-      anterior = atual;
-      atual = atual->proximo;
-    }
-    // CASO 2: COMECO
-    if (anterior == NULL && atual != NULL) {
-      novo->proximo = atual;
-      pacientes->inicio = novo;
-      pacientes->qtd++;
-    }
-    // CASO 3: FIM
-    if (anterior != NULL && atual == NULL) {
-      anterior->proximo = novo;
-      pacientes->qtd++;
-    }
-    // CASO 4: MEIO
-    if (anterior != NULL && atual != NULL) {
-      anterior->proximo = novo;
-      novo->proximo = atual;
-      pacientes->qtd++;
-    }
+    novo->proximo = atual;
+    pacientes->inicio = novo;
+    pacientes->qtd++;
   }
 }
 
@@ -214,14 +195,14 @@ void mostrarLista(Lista *pacientes) {
 // MANIPULAÇÃO DE FILA
 // ===============================================================================
 
-void inserirFila(Fila *atendimento, Registro *paciente){
+void inserirFila(Fila *atendimento, Registro *paciente) {
   CelFila *novo = cria_CelFila(paciente);
 
-  if(atendimento->qtd == 0){
+  if (atendimento->qtd == 0) {
     atendimento->head = novo;
     atendimento->tail = novo;
     atendimento->qtd++;
-  } 
+  }
 
   else {
     CelFila *atual = atendimento->tail;
@@ -233,12 +214,12 @@ void inserirFila(Fila *atendimento, Registro *paciente){
   }
 }
 
-void removerFila(Fila *atendimento, Registro *paciente){
-  if(atendimento->qtd == 0){
+void removerFila(Fila *atendimento, Registro *paciente) {
+  if (atendimento->qtd == 0) {
     printf("Erro!\n");
   }
 
-  else if(atendimento->qtd == 1){
+  else if (atendimento->qtd == 1) {
     atendimento->head = NULL;
     free(atendimento->head);
     atendimento->qtd--;
@@ -257,143 +238,135 @@ void removerFila(Fila *atendimento, Registro *paciente){
 // MANIPULAÇÃO DE ÁRVORE BINÁRIA DE BUSCA
 // ===============================================================================
 
-
-void mostrarArvore(CelArvore *raiz, Lista *pacientes){
-  if(raiz != NULL){
+void mostrarArvore(CelArvore *raiz, Lista *pacientes) {
+  if (raiz != NULL) {
     mostrarArvore(raiz->filhoesq, pacientes);
     exibirPacienteInfos(raiz->paciente.rg, pacientes);
     mostrarArvore(raiz->filhodir, pacientes);
   }
 }
 
-void inserirArvore(Lista *pacientes, int type){
+void inserirArvore(Lista *pacientes, int type) {
   Arvore *pesquisa = cria_Arvore();
-  CelArvore *novo = cria_CelArvore(&pacientes->inicio->paciente);
+  CelLista *paciente = pacientes->inicio;
 
-  for(int i = 0; i < pacientes->qtd; i++){
-    printf("paciente %d", i);
-  
-    if(type == 1){
-      
-      if(pesquisa->raiz == NULL){
+  while (paciente != NULL) {
+    CelArvore *novo = cria_CelArvore(&paciente->paciente);
+
+    if (type == 1) {
+
+      if (pesquisa->raiz == NULL) {
         pesquisa->raiz = novo;
       }
 
-      else{
+      else {
         CelArvore *atual = pesquisa->raiz;
         CelArvore *anterior = NULL;
 
-        while(atual != NULL){
-            anterior = atual;
-            if(atual->paciente.entrada.ano > novo->paciente.entrada.ano){
-              atual = atual->filhoesq;
-            }
-            else{
-              atual = atual->filhodir;
-            }
+        while (atual != NULL) {
+          anterior = atual;
+          if (atual->paciente.entrada.ano > novo->paciente.entrada.ano) {
+            atual = atual->filhoesq;
+          } else {
+            atual = atual->filhodir;
           }
-          if(anterior->paciente.entrada.ano < novo->paciente.entrada.ano){
-            anterior->filhodir = novo;
-          }
-          else{
-            anterior->filhoesq = novo;
-          }
-        novo->pai = anterior;
         }
+        if (anterior->paciente.entrada.ano < novo->paciente.entrada.ano) {
+          anterior->filhodir = novo;
+        } else {
+          anterior->filhoesq = novo;
+        }
+        novo->pai = anterior;
+      }
       pesquisa->qtd++;
     }
 
-    else if(type == 2){
+    else if (type == 2) {
 
-      if(pesquisa->raiz == NULL){
+      if (pesquisa->raiz == NULL) {
         pesquisa->raiz = novo;
       }
 
-      else{
+      else {
         CelArvore *atual = pesquisa->raiz;
         CelArvore *anterior = NULL;
 
-        while(atual != NULL){
-            anterior = atual;
-            if(atual->paciente.entrada.mes > novo->paciente.entrada.mes){
-              atual = atual->filhoesq;
-            }
-            else{
-              atual = atual->filhodir;
-            }
+        while (atual != NULL) {
+          anterior = atual;
+          if (atual->paciente.entrada.mes > novo->paciente.entrada.mes) {
+            atual = atual->filhoesq;
+          } else {
+            atual = atual->filhodir;
           }
-          if(anterior->paciente.entrada.mes < novo->paciente.entrada.mes){
-            anterior->filhodir = novo;
-          }
-          else{
-            anterior->filhoesq = novo;
-          }
-        novo->pai = anterior;
         }
+        if (anterior->paciente.entrada.mes < novo->paciente.entrada.mes) {
+          anterior->filhodir = novo;
+        } else {
+          anterior->filhoesq = novo;
+        }
+        novo->pai = anterior;
+      }
       pesquisa->qtd++;
     }
 
-    else if(type == 3){
+    else if (type == 3) {
 
-      if(pesquisa->raiz == NULL){
+      if (pesquisa->raiz == NULL) {
         pesquisa->raiz = novo;
       }
 
-      else{
+      else {
         CelArvore *atual = pesquisa->raiz;
         CelArvore *anterior = NULL;
 
-        while(atual != NULL){
-            anterior = atual;
-            if(atual->paciente.entrada.dia > novo->paciente.entrada.dia){
-              atual = atual->filhoesq;
-            }
-            else{
-              atual = atual->filhodir;
-            }
+        while (atual != NULL) {
+          anterior = atual;
+          if (atual->paciente.entrada.dia > novo->paciente.entrada.dia) {
+            atual = atual->filhoesq;
+          } else {
+            atual = atual->filhodir;
           }
-          if(anterior->paciente.entrada.dia < novo->paciente.entrada.dia){
-            anterior->filhodir = novo;
-          }
-          else{
-            anterior->filhoesq = novo;
-          }
-        novo->pai = anterior;
         }
+        if (anterior->paciente.entrada.dia < novo->paciente.entrada.dia) {
+          anterior->filhodir = novo;
+        } else {
+          anterior->filhoesq = novo;
+        }
+        novo->pai = anterior;
+      }
       pesquisa->qtd++;
     }
 
-    else if(type == 4){
+    else if (type == 4) {
 
-      if(pesquisa->raiz == NULL){
+      if (pesquisa->raiz == NULL) {
         pesquisa->raiz = novo;
       }
 
-      else{
+      else {
         CelArvore *atual = pesquisa->raiz;
         CelArvore *anterior = NULL;
 
-        while(atual != NULL){
-            anterior = atual;
-            if(atual->paciente.idade > novo->paciente.idade){
-              atual = atual->filhoesq;
-            }
-            else{
-              atual = atual->filhodir;
-            }
+        while (atual != NULL) {
+          anterior = atual;
+          if (atual->paciente.idade > novo->paciente.idade) {
+            atual = atual->filhoesq;
+          } else {
+            atual = atual->filhodir;
           }
-          if(anterior->paciente.idade < novo->paciente.idade){
-            anterior->filhodir = novo;
-          }
-          else{
-            anterior->filhoesq = novo;
-          }
-        novo->pai = anterior;
         }
+        if (anterior->paciente.idade < novo->paciente.idade) {
+          anterior->filhodir = novo;
+        } else {
+          anterior->filhoesq = novo;
+        }
+        novo->pai = anterior;
+      }
       pesquisa->qtd++;
     }
+
+    paciente = paciente->proximo;
   }
-
   mostrarArvore(pesquisa->raiz, pacientes);
 }
 
@@ -433,9 +406,9 @@ Registro *pegar_dados(Lista *pacientes) {
   struct tm *data_atual = localtime(&data);
 
   // tm_day: representa os dias do mês de 1 a 31
-  // tm_mon: representa os meses do ano de 0 a 11, por isso adicionamos 1 no valor 
-  // obtido 
-  // tm_year: representa o ano a partir de 1900, por isso adicionamos 1900 no valor obtido
+  // tm_mon: representa os meses do ano de 0 a 11, por isso adicionamos 1 no
+  // valor obtido tm_year: representa o ano a partir de 1900, por isso
+  // adicionamos 1900 no valor obtido
 
   paciente->entrada.dia = data_atual->tm_mday;
   paciente->entrada.mes = data_atual->tm_mon + 1;
