@@ -8,6 +8,10 @@ CelLista *cria_CelLista(Registro paciente);
 
 CelArvore *cria_CelArvore(Registro *paciente);
 
+int ExistePaciente(long int rg, Lista *pacientes);
+
+int ExistePacienteNaFila(long int rg, Fila *atendimento);
+
 Arvore *cria_Arvore();
 
 void mostrarFila(Fila *atendimento);
@@ -15,6 +19,12 @@ void mostrarFila(Fila *atendimento);
 Fila *cria_Fila();
 
 CelFila *cria_CelFila(Registro *paciente);
+
+void removerFila(Fila *atendimento);
+
+void inserirFila(Fila *atendimento, Lista *pacientes);
+
+void mostrarFila(Fila *atendimento);
 
 void inserirLista(Lista *pacientes, Registro paciente);
 
@@ -28,7 +38,7 @@ void removerPaciente(Lista *pacientes);
 
 void CadastrarOpcoes(Lista *pacientes);
 
-void AtendimentoOpcoes(Lista *pacientes);
+void AtendimentoOpcoes(Lista *pacientes, Fila *atendimento);
 
 void PesquisaOpcoes(Lista *pacientes);
 

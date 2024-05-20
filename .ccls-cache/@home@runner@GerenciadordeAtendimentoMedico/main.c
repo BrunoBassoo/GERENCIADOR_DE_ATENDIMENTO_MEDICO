@@ -32,7 +32,7 @@ int main(void) {
       break;
       
     case 2:
-      AtendimentoOpcoes(pacientes);
+      AtendimentoOpcoes(pacientes, atendimento);
       break;
       
     case 3:

@@ -93,6 +93,15 @@ void limpaBuffer() {
   } while (a != '\n' && a != EOF);
 }
 
+// Essas são as funções mais importantes para a realização desse projeto, pois em quase todos os casos, ela foi necessária.
+
+// Seu funcionamento é bem simples:
+// Para validarmos se o paciente existe, passamos para ela o RG que o usuário ou até mesmo o programa deseja verificar.
+// Após isso, é feito um "while" percorrendo toda a lista/fila de pacientes existentes e comparando o RG de todos com o RG fornecido na função.
+// Se o valor fornecido for igual a algum RG, então a função retorna o valor da posição (index) em que esse RG foi localizado.
+// Se não, a função retorna -1.
+// Lembrando que 0 também é um índice, por isso foi optado por retornar -1.
+
 int ExistePaciente(long int rg, Lista *pacientes) {
   int idx = 0;
   CelLista *atual = pacientes->inicio;
@@ -124,6 +133,8 @@ int ExistePacienteNaFila(long int rg, Fila *atendimento) {
 
   return -1;
 }
+
+// Essa função serve apenas para poder imprimir as informações de todos os pacientes.
 
 void exibirPacienteInfos(long int rg, Lista *pacientes) {
   long int id = ExistePaciente(rg, pacientes);
@@ -517,9 +528,9 @@ Registro *pegar_dados(Lista *pacientes) {
   // valor obtido tm_year: representa o ano a partir de 1900, por isso
   // adicionamos 1900 no valor obtido
 
-  paciente->entrada.dia = data_atual->tm_mday;
-  paciente->entrada.mes = data_atual->tm_mon + 1;
-  paciente->entrada.ano = data_atual->tm_year + 1900;
+  paciente->entrada.dia = 12;   // data_atual->tm_mday;
+  paciente->entrada.mes = 11;   // data_atual->tm_mon + 1;
+  paciente->entrada.ano = 1978;   // data_atual->tm_year + 1900;
 
   id = ExistePaciente(id, pacientes);
 
@@ -583,6 +594,7 @@ void atualizarPaciente(Lista *pacientes) {
 
     int opcao;
 
+    printf("\n");
     imprimirMenuAtualizarDado();
     printf("--> ");
     scanf("%d", &opcao);
@@ -591,7 +603,7 @@ void atualizarPaciente(Lista *pacientes) {
       limpaBuffer();
       printf("\nDigite o nome atualizado: ");
       fgets(atual->paciente.nome, 50, stdin);
-      printf("\nNome atualizada com sucesso!\n\n");
+      printf("\nNome atualizado com sucesso!\n\n");
     }
 
     else if (opcao == 2) {
@@ -685,6 +697,13 @@ void removerPaciente(Lista *pacientes) {
 // MANIPULAÇÃO DOS ARQUIVOS
 // ===============================================================================
 
+// Aqui estão todas as funções de salvar as informações nos arquivos binários.
+
+// Para criar, é bem simples
+// Basta abrir um novo arquivo, com o nome pacientes.bin, para escrever.
+// Para escrever, fazemos um "while" percorrendo a lista de todos os pacientes existentes até agora e vamos escrevendo seus dados.
+// Escrevemos todos e depois fechamos o arquivo.
+
 void SalvarPacientes(Lista *pacientes) {
 
   FILE *file = fopen("pacientes.bin", "wb");
@@ -703,6 +722,12 @@ void SalvarPacientes(Lista *pacientes) {
 
   fclose(file);
 }
+
+// Aqui carregamos os arquivo binários com os dados já recebidos antigamente por usuários.
+
+// Também é bem simples.
+// Para carregar os dados dos pacientes, foi necessário abrir o arquivo mas dessa vez para leitura. Enquanto o arquivo não chegar ao fim, ele lerá todos os dados que estão armazenados nele e irá inserir na lista de pacientes, que no momento inicial, está vazia.
+// Depois de ler e receber todas as informações necessárias, fechamos o arquivo.
 
 void CarregarPacientes(Lista *pacientes) {
 
